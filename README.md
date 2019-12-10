@@ -9,6 +9,8 @@ Thus, `dwm` users are encouraged to "fork" their on version to customize however
 If you're interested check out [suckless](https://suckless.org) to learn more. You should also read the
 [original README](README) of this project.
 
+Applyed patches: [systray](https://dwm.suckless.org/patches/systray/)
+
 ## Usage
 
 Simply compile/install and be happy:
