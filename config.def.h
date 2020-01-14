@@ -69,6 +69,16 @@ static const char *termcmd[]  = { "urxvt", NULL };
 static const char *lockcmd[]  = {"/bin/sh", "-c", "$HOME/.config/lock.sh", NULL };
 static const char *flameshotcmd[] = {"flameshot", "gui", NULL};
 
+
+/* run-or-raise commands */
+static const char *roropera[]  = { "/home/ribraim/.config/run_or_raise.sh", "opera", NULL };
+static const char *rorcode[]   = { "/home/ribraim/.config/run_or_raise.sh", "code", NULL };
+
+static RoR rors[] = {
+	{ .cmd = roropera,         .tag = 1 << 0 },
+	{ .cmd = rorcode,          .tag = 1 << 2 },
+};
+
 static Key keys[] = {
 	/* modifier                     key        function        argument */
      	{ 0,                            XK_Print,  spawn,          {.v = flameshotcmd } },
@@ -77,6 +87,8 @@ static Key keys[] = {
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
 	{ ALTKEY,                       XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_l,      spawn,          {.v = lockcmd } },
+	{ 0,                            XK_F1,     spawn,          {.v = roropera } },
+	{ 0,                            XK_F3,     spawn,          {.v = rorcode } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_Right,  focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_Left,   focusstack,     {.i = -1 } },

@@ -165,6 +165,11 @@ struct Systray {
 	Client *icons;
 };
 
+typedef struct {
+  unsigned int tag;
+  const char **cmd;
+} RoR; // run-or-raise
+
 /* function declarations */
 static void applyrules(Client *c);
 static int applysizehints(Client *c, int *x, int *y, int *w, int *h, int interact);
@@ -1900,6 +1905,14 @@ spawn(const Arg *arg)
 {
 	if (arg->v == dmenucmd)
 		dmenumon[0] = '0' + selmon->num;
+
+	for (int i = 0; i < LENGTH(rors); i++) {
+	  if (rors[i].cmd == arg->v) {
+	    Arg a = {.ui = rors[i].tag};
+	    view(&a);
+	  }
+	}
+
 	if (fork() == 0) {
 		if (dpy)
 			close(ConnectionNumber(dpy));
