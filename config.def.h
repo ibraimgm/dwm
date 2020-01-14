@@ -88,6 +88,7 @@ static Key keys[] = {
 	{ ALTKEY,                       XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_l,      spawn,          {.v = lockcmd } },
 	{ 0,                            XK_F1,     spawn,          {.v = roropera } },
+	{ 0,                            XK_F2,     view,           {.ui = 1 << 1 } },
 	{ 0,                            XK_F3,     spawn,          {.v = rorcode } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_Right,  focusstack,     {.i = +1 } },

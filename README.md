@@ -13,6 +13,7 @@ Applyed patches:
 - [systray](https://dwm.suckless.org/patches/systray/)
 - [bottomstack](https://dwm.suckless.org/patches/bottomstack/)
 - [zoomswap](https://dwm.suckless.org/patches/zoomswap/)
+- [attachbottom](https://dwm.suckless.org/patches/attachbottom/) (modified to work only when opening the terminal)
 
 ## Usage
 

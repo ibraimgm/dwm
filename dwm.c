@@ -176,6 +176,7 @@ static int applysizehints(Client *c, int *x, int *y, int *w, int *h, int interac
 static void arrange(Monitor *m);
 static void arrangemon(Monitor *m);
 static void attach(Client *c);
+static void attachbelow(Client *c);
 static void attachstack(Client *c);
 static void buttonpress(XEvent *e);
 static void checkotherwm(void);
@@ -312,6 +313,7 @@ static Display *dpy;
 static Drw *drw;
 static Monitor *mons, *selmon;
 static Window root, wmcheckwin;
+static int belowCounter;
 
 /* configuration, allows nested code to access above variables */
 #include "config.h"
@@ -447,8 +449,26 @@ arrangemon(Monitor *m)
 void
 attach(Client *c)
 {
+	if (belowCounter > 0) {
+		attachbelow(c);
+		return;
+	}
+
 	c->next = c->mon->clients;
 	c->mon->clients = c;
+}
+
+void
+attachbelow(Client *c)
+{
+	Client *below = c->mon->clients;
+	for (; below && below->next; below = below->next);
+	if (below)
+		below->next = c;
+	else
+		c->mon->clients = c;
+
+	belowCounter--;
 }
 
 void
@@ -1906,6 +1926,7 @@ spawn(const Arg *arg)
 	if (arg->v == dmenucmd)
 		dmenumon[0] = '0' + selmon->num;
 
+	// apply the 'run-or-raise' attributes
 	for (int i = 0; i < LENGTH(rors); i++) {
 	  if (rors[i].cmd == arg->v) {
 	    Arg a = {.ui = rors[i].tag};
@@ -1913,9 +1934,15 @@ spawn(const Arg *arg)
 	  }
 	}
 
+	// signal that the window should open at the bottom of the stack
+	if (arg->v == termcmd) {
+	  belowCounter++;
+	}
+
 	if (fork() == 0) {
 		if (dpy)
 			close(ConnectionNumber(dpy));
+
 		setsid();
 		execvp(((char **)arg->v)[0], (char **)arg->v);
 		fprintf(stderr, "dwm: execvp %s", ((char **)arg->v)[0]);
