@@ -85,7 +85,7 @@ enum { WMProtocols, WMDelete, WMState, WMTakeFocus, WMLast }; /* default atoms *
 enum { ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle,
        ClkClientWin, ClkRootWin, ClkLast }; /* clicks */
 
-typedef union {
+typedef struct {
 	int i;
 	unsigned int ui;
 	float f;
@@ -165,10 +165,6 @@ struct Systray {
 	Client *icons;
 };
 
-typedef struct {
-  unsigned int tag;
-  const char **cmd;
-} RoR; // run-or-raise
 
 /* function declarations */
 static void applyrules(Client *c);
@@ -229,6 +225,7 @@ static void resizemouse(const Arg *arg);
 static void resizerequest(XEvent *e);
 static void restack(Monitor *m);
 static void run(void);
+static void runorraise(const Arg *arg);
 static void scan(void);
 static int sendevent(Window w, Atom proto, int m, long d0, long d1, long d2, long d3, long d4);
 static void sendmon(Client *c, Monitor *m);
@@ -1646,6 +1643,36 @@ run(void)
 }
 
 void
+runorraise(const Arg *arg)
+{
+  char *app = ((char **)arg->v)[4];
+  Arg a = { .ui = ~0 };
+  Monitor *mon;
+  Client *c;
+  XClassHint hint = { NULL, NULL };
+
+  /* tries to find the client */
+  for (mon = mons; mon; mon = mon->next) {
+    for (c = mon->clients; c; c = c->next) {
+      XGetClassHint(dpy, c->win, &hint);
+      if (hint.res_class && strcmp(app, hint.res_class) == 0) {
+	a.ui = c->tags;
+	view(&a);
+	focus(c);
+	XRaiseWindow(dpy, c->win);
+	return;
+      }
+    }
+  }
+
+  /* not found: spawn! */
+  if (arg->i != 0) {
+    view(arg);
+  }
+  spawn(arg);
+}
+
+void
 scan(void)
 {
 	unsigned int i, num;
@@ -1925,14 +1952,6 @@ spawn(const Arg *arg)
 {
 	if (arg->v == dmenucmd)
 		dmenumon[0] = '0' + selmon->num;
-
-	// apply the 'run-or-raise' attributes
-	for (int i = 0; i < LENGTH(rors); i++) {
-	  if (rors[i].cmd == arg->v) {
-	    Arg a = {.ui = rors[i].tag};
-	    view(&a);
-	  }
-	}
 
 	// signal that the window should open at the bottom of the stack
 	if (arg->v == termcmd) {

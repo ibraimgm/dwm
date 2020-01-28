@@ -14,6 +14,7 @@ Applyed patches:
 - [bottomstack](https://dwm.suckless.org/patches/bottomstack/)
 - [zoomswap](https://dwm.suckless.org/patches/zoomswap/)
 - [attachbottom](https://dwm.suckless.org/patches/attachbottom/) (modified to work only when opening the terminal)
+- [runorraise](https://gist.github.com/ivoarch/4107047) (modified to optionally accept a 'target' tag)
 
 ## Usage
 

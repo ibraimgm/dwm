@@ -65,19 +65,20 @@ static const Layout layouts[] = {
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
-static const char *termcmd[]  = { "urxvt", NULL };
 static const char *lockcmd[]  = {"/bin/sh", "-c", "$HOME/.config/lock.sh", NULL };
 static const char *flameshotcmd[] = {"flameshot", "gui", NULL};
 
+/* run or raise commands */
+/*
+  Use xprop to get the window class and put it into the position [4] or the command array.
+  After that, just use 'runorraise' instead of 'spawn'. You can 'force' a specific tag
+  by setting '.ui' AND '.i = 1'.
+ */
+static const char *termcmd[]  = { "urxvt", NULL, NULL, NULL, "URxvt" };
+static const char *operacmd[] = {"opera", NULL, NULL, NULL, "Opera"};
+static const char *vscodecmd[] = {"code", NULL, NULL, NULL, "Code"};
 
-/* run-or-raise commands */
-static const char *roropera[]  = { "/home/ribraim/.config/run_or_raise.sh", "opera", NULL };
-static const char *rorcode[]   = { "/home/ribraim/.config/run_or_raise.sh", "code", NULL };
 
-static RoR rors[] = {
-	{ .cmd = roropera,         .tag = 1 << 0 },
-	{ .cmd = rorcode,          .tag = 1 << 2 },
-};
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -87,9 +88,9 @@ static Key keys[] = {
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
 	{ ALTKEY,                       XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_l,      spawn,          {.v = lockcmd } },
-	{ 0,                            XK_F1,     spawn,          {.v = roropera } },
-	{ 0,                            XK_F2,     view,           {.ui = 1 << 1 } },
-	{ 0,                            XK_F3,     spawn,          {.v = rorcode } },
+	{ 0,                            XK_F1,     runorraise,     {.v = operacmd,  .ui = 1 << 0, .i = 1 } },
+	{ 0,                            XK_F2,     runorraise,     {.v = termcmd,   .ui = 1 << 1, .i = 1 } },
+	{ 0,                            XK_F3,     runorraise,     {.v = vscodecmd, .ui = 1 << 2, .i = 1 } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_Right,  focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_Left,   focusstack,     {.i = -1 } },
