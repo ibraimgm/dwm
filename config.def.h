@@ -75,7 +75,7 @@ static const char *flameshotcmd[] = {"flameshot", "gui", NULL};
   by setting '.ui' AND '.i = 1'.
  */
 static const char *termcmd[]  = { "urxvt", NULL, NULL, NULL, "URxvt" };
-static const char *operacmd[] = {"opera", NULL, NULL, NULL, "Opera"};
+static const char *browsercmd[] = {"brave", NULL, NULL, NULL, "Brave"};
 static const char *vscodecmd[] = {"code", NULL, NULL, NULL, "code"};
 
 
@@ -87,7 +87,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
 	{ ALTKEY,                       XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_l,      spawn,          {.v = lockcmd } },
-	{ 0,                            XK_F1,     runorraise,     {.v = operacmd,  .ui = 1 << 0, .i = 1 } },
+	{ 0,                            XK_F1,     runorraise,     {.v = browsercmd,  .ui = 1 << 0, .i = 1 } },
 	{ 0,                            XK_F2,     runorraise,     {.v = termcmd,   .ui = 1 << 1, .i = 1 } },
 	{ 0,                            XK_F3,     runorraise,     {.v = vscodecmd, .ui = 1 << 2, .i = 1 } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
