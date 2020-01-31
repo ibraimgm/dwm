@@ -76,8 +76,7 @@ static const char *flameshotcmd[] = {"flameshot", "gui", NULL};
  */
 static const char *termcmd[]  = { "urxvt", NULL, NULL, NULL, "URxvt" };
 static const char *operacmd[] = {"opera", NULL, NULL, NULL, "Opera"};
-static const char *vscodecmd[] = {"code", NULL, NULL, NULL, "Code"};
-
+static const char *vscodecmd[] = {"code", NULL, NULL, NULL, "code"};
 
 
 static Key keys[] = {
